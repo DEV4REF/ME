@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anton, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { RegisterSW } from "@/components/RegisterSW";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -33,6 +34,12 @@ export const metadata: Metadata = {
     "dev4ref",
   ],
   authors: [{ name: "Aaref" }],
+  manifest: "manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Aaref",
+  },
   openGraph: {
     title: "Aaref | عارف — Programmer & Digital Builder",
     description:
@@ -46,6 +53,12 @@ export const metadata: Metadata = {
     description:
       "Building high-quality digital systems, web applications, automation tools and meaningful user experiences.",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0C0C0C",
+  width: "device-width",
+  initialScale: 1,
 };
 
 /**
@@ -117,12 +130,20 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap"
           rel="stylesheet"
         />
+        {/* PWA icons (relative paths — resolve correctly under any base path) */}
+        <link rel="icon" href="favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
       </head>
       <body
         className={`${anton.variable} ${vazirmatn.variable} antialiased bg-[#0C0C0C] text-[#D7E2EA] overflow-x-clip`}
         style={{ backgroundColor: "#0C0C0C", color: "#D7E2EA" }}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <RegisterSW />
+          {children}
+        </Providers>
       </body>
     </html>
   );
